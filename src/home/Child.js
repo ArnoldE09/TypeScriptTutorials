@@ -8,3 +8,6 @@ export default function Child({parentToChild}) {
     )
 }
 //sample here 
+//sample here 
+//sample here 
+//sample here 
