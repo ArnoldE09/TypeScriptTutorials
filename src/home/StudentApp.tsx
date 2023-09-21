@@ -5,17 +5,17 @@ import { studentList } from "./students";
 import { DisplayData } from "./DisplayData";
 //import { GenericSort } from "./GenericSort";
 
-function StudentApp({ Appname }: AppName) {
+function StudentApp({ Appname,versionNo }: AppName) {
   const [student, setStudent] = useState<Student | null>(null)
   const [list, setList] = useState(studentList)
 
   
     const addStudent = () => {
         setStudent({
-          name: 'Antony',
-          surname: 'Ndungu',
-          age: 20,
-          level: "Undergraduate"
+          name: 'Arnold',
+          surname: 'Estorba',
+          age: 40,
+          level: "Graduate"
         })
       }
 
@@ -33,9 +33,10 @@ function StudentApp({ Appname }: AppName) {
         level: ""
       })
   }
+  
   return (
     <div className="App">
-      <h1>{Appname}</h1>
+      <h1>{Appname} {versionNo}</h1>
       <p><b>Name:</b>{student?.name}{','}{student?.surname}</p>
       <p><b>Age:</b> {student?.age}</p>
       <p><b>Level:</b> {student?.level}</p>

@@ -7,7 +7,7 @@ export class Stock {
   
     constructor(initializer?: any) {
       if (!initializer) return;
-      if (initializer.company) this.company = initializer.id;
+      if (initializer.company) this.company = initializer.company;
       if (initializer.ticker) this.ticker = initializer.userId;
       if (initializer.stockPrice) this.stockPrice = initializer.title;
       if (initializer.timeElapsed) this.timeElapsed = initializer.body;

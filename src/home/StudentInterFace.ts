@@ -1,5 +1,6 @@
 export interface AppName {
     Appname: string;
+    versionNo:string;
   }
   
   export interface Address {

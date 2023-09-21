@@ -7,7 +7,3 @@ export default function Child({parentToChild}) {
         </div>
     )
 }
-//sample here 
-//sample here 
-//sample here 
-//sample here 

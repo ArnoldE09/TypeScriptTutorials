@@ -2,167 +2,199 @@ import { stockData } from "./data";
 import React,{useState,SyntheticEvent} from 'react';
 import "../index.css"
 import { Stock } from "./Stock";
-import EditStock from "./EditStock";
 import { Col,Form} from "react-bootstrap";
 
 
 
-const handleChange = (event: any) => {
-}
-const handleSubmit = (event: SyntheticEvent) => {
-  event.preventDefault();
-  // alert("handle submit " + isValid())
-  // if (!isValid()) return;
-  // onSave(project);
-  //onCancel();
-  };
+// const handleChange = (event: any) => {
+// }
+// const handleSubmit = (event: SyntheticEvent) => {
+//   event.preventDefault();
+//   // alert("handle submit " + isValid())
+//   // if (!isValid()) return;
+//   // onSave(project);
+//   //onCancel();
+//   };
 
-  interface StockFormProps {
+   interface stockListProps {
     stock: Stock;  
-    
-  }
-export const Stocks = () => {
-   const [stockBeingEdited,setStockBeingEdited]=useState({});
-    
-   const handleEdit=(stock:Stock)=> {
-     alert("ProjectForm " + JSON.stringify(stock, null, 2));
-     setStockBeingEdited(stock);
-   };
-   
-    const cancelEditing=() =>{
-      setProjectBeingEdited({});
-  };
-   
-     return (
-     <>
-        <div className="stock-container">
-         {stockData.map((stock, key) => {
-           return (
-            <div key={key}>
-              {stock===stockBeingEdited ?(
-                <StockForm 
-                  stock={stock}
-                />
-          ) : (
-             <StockCard stock={stock}  />
-            )}
-           </div>
-           );
-         })}
-       </div>
-       
-       
-       
+    onSave:(stock:Stock)=>void;
+   }
 
-      </>
-   );
+   interface stockFormProps {
+    stock: Stock;  
+    onSave: (stock: Stock) => void;
+    onCancel: () => void;
+  }
+export const Stocks = ({ stock,onSave }: stockListProps) => {
+  
+  const [stocktBeingEdited,setStockBeingEdited]=useState({});
+  const handleEdit=(stock:Stock)=> {
+    setStockBeingEdited(stock);
+  };
+
+  const cancelEditing=() =>{
+    setStockBeingEdited({});
+};
+   
+  return (
+    <>
+      
+        {stockData.map((stock,key) => (
+           
+              
+                <div className="rows">
+                  {stock ===stocktBeingEdited ?(
+                    <StockForm 
+                      stock={stock}
+                      onSave={onSave}
+                      onCancel={cancelEditing}
+                    />
+                
+            ) : (
+              <div className="card">
+                <StockCard stock={stock} onEdit={handleEdit} />
+              </div>          
+            )}
+           </div>  
+           
+            
+        ))}
+      
+    </>
+  )
  };
 
-
-
-
-
-const StockCard = ({stock}: StockFormProps) => {
-     const handleEdit=(stock:Stock)=> {
-       alert("here " + JSON.stringify(stock, null, 2));
-       //setStockBeingEdited(stock);
-     };
-  return (
-    
-    <div className="cards">
-      <div className="card">
-        <small> {stock.company}</small> 
-        <div>
-          <small>{stock.ticker} </small>
-        </div>
-        <div>
-          <h1>{stock.stockPrice}</h1>
-        </div>
-        <div>
-          <small>{stock.timeElapsed}</small>
-        </div>
-         
-        {/* <button
-          className=" bordered"
-          onClick={() => {
-             handleEdit(stock);
+const StockCard = (props: any)  => {
+  
+  const { stock,onEdit } = props;
+  
+  const handleEditClick = (stockBeingEdited: Stock) => {
+    // alert("projectBeingEdited " + JSON.stringify(stockBeingEdited, null, 2));
+    onEdit(stockBeingEdited);    
+    };
+      return (
+        <>
+            
+                <p> {'Name:'} {stock.company} {', '}{stock.stockPrice} </p>
+            
+               <p>{'Elapsed:'}{stock.timeElapsed }</p>
+           
+            <button
+            className=" bordered"
+            onClick={() => {
+            handleEditClick(stock);
           }}
-        > Modify</button> */}
-      </div>
-      <hr></hr>
-      
-    </div>
-    
-  );
+        >
+          <span className="icon-edit "></span>
+          Modify
+        </button>
+        
+        </>
+      );
 };
 
-const StockForm = ({stock: initialStock}: StockFormProps) => {
-   const [stock,setStock]=useState(initialStock);
-    // if (!props.company) return <div />;
+const StockForm = ({stock:initialStock,onSave,onCancel}: stockFormProps) => {
+   
+  const [stock,setStock]=useState(initialStock);
     
+    
+    const handleSubmit = (event: SyntheticEvent) => {
+      event.preventDefault();
+      alert("stock " + JSON.stringify(stock, null, 2));
+      // alert("handle submit " + isValid())
+      // if (!isValid()) return;
+      onSave(stock);
+      //onCancel();
+      };
+
+      const handleChange = (event: any) => {
+      
+         const { type, name,  value, checked } = event.target;
+        
+         let updatedValue = type === 'checkbox' ? checked : value;
+         if (type === 'number') {
+             updatedValue = Number(updatedValue);
+         }
+         const change = {
+           [name]: updatedValue,
+         };
+        
+         let updatedStock: Stock;
+        
+        
+        
+        setStock((p) => {
+          alert("here")
+          updatedStock = new Stock({ ...p, ...change });
+          return updatedStock;
+        });
+        // setErrors(() => validate(updatedProject));
+      };
     
     return (
         
       <Form.Group className="input-group vertical" onSubmit={handleSubmit}>
-        {'Project name'}
-        <Col>
-            <Form.Control
-              type="text"
-              name="name"
-              defaultValue={stock.company}
-              placeholder="Company  Name"
-              onChange={handleChange}
-            />
-            {/* {errors.name.length > 0 && (
-              <div className="card error">
-                <p>{errors.name}</p>
-              </div>
-            )} */}
-        </Col>
-        {'Description'}
-        <Col>
-            <Form.Control  
-              type ="text"
-              defaultValue={stock.stockPrice}
-              name="stockPrice"
-              placeholder="Description"
-              onChange={handleChange}
-            />
-             {/* {errors.description.length > 0 && (
-                <div className="card error">
-                  <p>{errors.description}</p>
-                </div>
-              )} */}
-        </Col>
-        {'Budget'}
-        <Col>
+        <div className="card">
+        {'Company name'}
+          <Col>
               <Form.Control
                 type="text"
-                name="budget"
-                defaultValue={stock.ticker}
-                placeholder="Project Budget"
+                name="name"
+                defaultValue={stock.company}
+                placeholder="Company  Name"
                 onChange={handleChange}
               />
-            {/* {errors.budget.length > 0 && (
-             <div className="card error">
-               <p>{errors.budget}</p>
-             </div>
-            )}             */}
-            <div className="input-group">
-              <Form.Control
-                name="isActive"
-                type="submit"
-                onClick={handleSubmit}
-                value="Save"
-              />  
-              <Form.Control
-                type="button"
-                onClick={onCancel}
-                value="Cancel" 
+              {/* {errors.name.length > 0 && (
+                <div className="card error">
+                  <p>{errors.name}</p>
+                </div>
+              )} */}
+          </Col>
+          {'Stock Price'}
+          <Col>
+              <Form.Control  
+                type ="text"
+                defaultValue={stock.stockPrice}
+                name="stockPrice"
+                placeholder="StockPrice"
+                onChange={handleChange}
               />
-              
-          </div>
-        </Col>
+              {/* {errors.description.length > 0 && (
+                  <div className="card error">
+                    <p>{errors.description}</p>
+                  </div>
+                )} */}
+          </Col>
+          {'ticker'}
+          <Col>
+                <Form.Control
+                  type="text"
+                  name="ticker"
+                  defaultValue={stock.ticker}
+                  placeholder="ticker"
+                  onChange={handleChange}
+                />
+              {/* {errors.budget.length > 0 && (
+              <div className="card error">
+                <p>{errors.budget}</p>
+              </div>
+              )}             */}
+              <div className="input-group">
+                <Form.Control
+                  name="isActive"
+                  type="submit"
+                  onClick={handleSubmit}
+                  value="Save"
+                />  
+                <Form.Control
+                  type="button"
+                  onClick={onCancel}
+                  value="Cancel" 
+                />
+            </div>
+          </Col>
+        </div>
       </Form.Group>
 
 );

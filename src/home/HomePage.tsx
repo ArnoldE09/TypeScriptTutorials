@@ -19,8 +19,8 @@ import React  from 'react';
 //import Field from './Field';
  //import FancyTitle from './FancyTitle';
 // import FormikLogin from './FormikLogin'
-// import StudentApp from './StudentApp';
-//import Parent from './ParenToChild';
+//  import StudentApp from './StudentApp';
+//  import Parent from './ParenToChild';
 
 
 
@@ -115,7 +115,7 @@ function HomePage() {
 
 {/* <BasicForm></BasicForm> */}
 {/* <FormikLogin></FormikLogin> */}
-{/* <StudentApp Appname="Student App"></StudentApp> */}
+{/* <StudentApp Appname="Student App" versionNo="1.0"></StudentApp> */}
 
 {/* <Stocks></Stocks> */}
 {/* <RadioButton></RadioButton> */}
@@ -165,6 +165,7 @@ function HomePage() {
     {/* <hr></hr> */}
     {/* <PostsTwo></PostsTwo> */}
     {/* <Parent></Parent> */}
+    {/* <StudentApp></StudentApp> */}
     
     
   </> 

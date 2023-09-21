@@ -8,7 +8,7 @@ export default function Parent() {
   const [data, setData] = useState('');
   
   const parentToChild = () => {
-    setData("This is data from Parent Component to the Child Component.");
+    setData("This is data from Parent Component to the Child Component.")
   }
   return (
     <div>
