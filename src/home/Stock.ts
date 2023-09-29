@@ -1,6 +1,10 @@
+export interface AppName {
+  Appname: string;
+  versionNo:string;
+}
 export class Stock {
-    company: string | undefined;
-    ticker?: string ;
+    company: string ='';
+    ticker: string ='';
     stockPrice: string = '';
     timeElapsed: string = '';
     
@@ -8,8 +12,8 @@ export class Stock {
     constructor(initializer?: any) {
       if (!initializer) return;
       if (initializer.company) this.company = initializer.company;
-      if (initializer.ticker) this.ticker = initializer.userId;
-      if (initializer.stockPrice) this.stockPrice = initializer.title;
-      if (initializer.timeElapsed) this.timeElapsed = initializer.body;
+      if (initializer.ticker) this.ticker = initializer.ticker;
+      if (initializer.stockPrice) this.stockPrice = initializer.stockPrice;
+      if (initializer.timeElapsed) this.timeElapsed = initializer.timeElapsed;
       }
   }

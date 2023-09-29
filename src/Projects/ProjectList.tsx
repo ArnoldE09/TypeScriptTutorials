@@ -6,6 +6,7 @@ import ProjectForm from './ProjectForm';
 interface ProjectListProps {
     projects: Project[];
     onSave:(project:Project)=>void;
+    
   }
 
   function ProjectList({ projects,onSave }: ProjectListProps) {

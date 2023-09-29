@@ -1,32 +1,25 @@
 import { stockData } from "./data";
 import React,{useState,SyntheticEvent} from 'react';
 import "../index.css"
-import { Stock } from "./Stock";
+import { Stock  } from "./Stock";
 import { Col,Form} from "react-bootstrap";
 
 
 
-// const handleChange = (event: any) => {
-// }
-// const handleSubmit = (event: SyntheticEvent) => {
-//   event.preventDefault();
-//   // alert("handle submit " + isValid())
-//   // if (!isValid()) return;
-//   // onSave(project);
-//   //onCancel();
-//   };
-
-   interface stockListProps {
-    stock: Stock;  
-    onSave:(stock:Stock)=>void;
-   }
-
-   interface stockFormProps {
-    stock: Stock;  
-    onSave: (stock: Stock) => void;
-    onCancel: () => void;
+  interface stockListProps {
+   stock: Stock;  
+   onSave:(stock:Stock)=>void;
+   appName:string;
   }
-export const Stocks = ({ stock,onSave }: stockListProps) => {
+
+  interface stockFormProps {
+   stock: Stock;  
+   onSave: (stock: Stock) => void;
+   onCancel: () => void;
+  }
+
+  
+export const Stocks = ({appName, stock,onSave }: stockListProps) => {
   
   const [stocktBeingEdited,setStockBeingEdited]=useState({});
   const handleEdit=(stock:Stock)=> {
@@ -35,22 +28,21 @@ export const Stocks = ({ stock,onSave }: stockListProps) => {
 
   const cancelEditing=() =>{
     setStockBeingEdited({});
+    //onCancel: () => void;
 };
    
   return (
     <>
-      
+        <h1>{appName}</h1>
         {stockData.map((stock,key) => (
-           
-              
-                <div className="rows">
+              <div className="cards">
                   {stock ===stocktBeingEdited ?(
                     <StockForm 
                       stock={stock}
                       onSave={onSave}
                       onCancel={cancelEditing}
                     />
-                
+                                
             ) : (
               <div className="card">
                 <StockCard stock={stock} onEdit={handleEdit} />
@@ -60,7 +52,6 @@ export const Stocks = ({ stock,onSave }: stockListProps) => {
            
             
         ))}
-      
     </>
   )
  };
@@ -95,111 +86,160 @@ const StockCard = (props: any)  => {
 };
 
 const StockForm = ({stock:initialStock,onSave,onCancel}: stockFormProps) => {
-   
   const [stock,setStock]=useState(initialStock);
+  const [errors, setErrors] = useState({ ofcompany: '',  ofstockPrice: '',  ofticker: ''});
+  const [isShown, setIsShown] = useState(false);
     
     
-    const handleSubmit = (event: SyntheticEvent) => {
+  const showToast = () => {
+    setIsShown(true);
+
+    setTimeout(() => {
+      setIsShown(true);
+    }, 1000);
+  };
+
+     const handleSubmit = (event: SyntheticEvent) => {
       event.preventDefault();
-      alert("stock " + JSON.stringify(stock, null, 2));
-      // alert("handle submit " + isValid())
-      // if (!isValid()) return;
+      if (!isValid()) {
+        showToast()
+        return;
+      }
+      alert("handleSubmit " + JSON.stringify(stock, null, 2));
       onSave(stock);
-      //onCancel();
+      onCancel();
       };
 
       const handleChange = (event: any) => {
+        setIsShown(false);
+        
       
          const { type, name,  value, checked } = event.target;
-        
-         let updatedValue = type === 'checkbox' ? checked : value;
+        let updatedValue = type === 'checkbox' ? checked : value;
          if (type === 'number') {
-             updatedValue = Number(updatedValue);
+            updatedValue = Number(updatedValue);
          }
          const change = {
            [name]: updatedValue,
          };
-        
          let updatedStock: Stock;
         
-        
-        
         setStock((p) => {
-          alert("here")
           updatedStock = new Stock({ ...p, ...change });
           return updatedStock;
         });
-        // setErrors(() => validate(updatedProject));
+        setErrors(() => validate(updatedStock));
       };
+      function validate(stock: Stock) {
+        let errors: any = { ofcompany: '', ofstockPrice: '', ofticker: '' };
+        if (stock.company.length === 0) {
+            errors.ofcompany = 'Company name is required';
+        }
+        if (stock.stockPrice.length === 0) {
+           errors.ofstockPrice = 'Stock Price is required.';
+        }
+        if (stock.ticker.length === 0) {
+            errors.ofticker = 'ticker is required';
+        }
+        return errors;
+      }
+      function isValid() {
+         
+        return (
+          errors.ofcompany.length === 0 &&
+          errors.ofstockPrice.length === 0 && 
+          errors.ofticker.length === 0
+          
+        );
+      }
     
-    return (
+      return (
         
-      <Form.Group className="input-group vertical" onSubmit={handleSubmit}>
-        <div className="card">
-        {'Company name'}
-          <Col>
-              <Form.Control
-                type="text"
-                name="name"
-                defaultValue={stock.company}
-                placeholder="Company  Name"
-                onChange={handleChange}
-              />
-              {/* {errors.name.length > 0 && (
-                <div className="card error">
-                  <p>{errors.name}</p>
-                </div>
-              )} */}
-          </Col>
-          {'Stock Price'}
-          <Col>
-              <Form.Control  
-                type ="text"
-                defaultValue={stock.stockPrice}
-                name="stockPrice"
-                placeholder="StockPrice"
-                onChange={handleChange}
-              />
-              {/* {errors.description.length > 0 && (
-                  <div className="card error">
-                    <p>{errors.description}</p>
-                  </div>
-                )} */}
-          </Col>
-          {'ticker'}
-          <Col>
+        <Form.Group className="input-group vertical" onSubmit={handleSubmit}>
+          <div className="card">
+          {'Company name'}
+            <Col>
                 <Form.Control
                   type="text"
-                  name="ticker"
-                  defaultValue={stock.ticker}
-                  placeholder="ticker"
+                  name="company"
+                  defaultValue={stock.company}
+                  placeholder="Company  Name"
                   onChange={handleChange}
                 />
-              {/* {errors.budget.length > 0 && (
-              <div className="card error">
-                <p>{errors.budget}</p>
-              </div>
-              )}             */}
-              <div className="input-group">
-                <Form.Control
-                  name="isActive"
-                  type="submit"
-                  onClick={handleSubmit}
-                  value="Save"
-                />  
-                <Form.Control
-                  type="button"
-                  onClick={onCancel}
-                  value="Cancel" 
+                    
+                  {isShown && (
+                    <div className='my-toast'>
+                      <span className='my-toast__icon'>i</span>
+                      <span>{errors.ofcompany}</span>
+                    </div>
+                  )}
+                {errors.ofcompany.length > 0 && (
+                  <div className="card-error">
+                    <span>{errors.ofcompany}</span>
+                  </div>
+                )}
+            </Col>
+            {'Stock Price'}
+            <Col>
+                <Form.Control  
+                  type ="text"
+                  defaultValue={stock.stockPrice}
+                  name="stockPrice"
+                  placeholder="StockPrice"
+                  onChange={handleChange}
                 />
-            </div>
-          </Col>
-        </div>
-      </Form.Group>
-
-);
-};
+                {isShown && (
+                    <div className='my-toast'>
+                      <span className='my-toast__icon'>i</span>
+                      <span>{errors.ofstockPrice}</span>
+                    </div>
+                  )}
+                {errors.ofstockPrice.length > 0 && (
+                  <div className="card-error">
+                    <span>{errors.ofstockPrice}</span>
+                  </div>
+                )}
+            </Col>
+            {'ticker'}
+            <Col>
+                  <Form.Control
+                    type="text"
+                    name="ticker"
+                    defaultValue={stock.ticker}
+                    placeholder="ticker"
+                    onChange={handleChange}
+                  />
+                
+                {isShown && (
+                    <div className='my-toast'>
+                      <span className='my-toast__icon'>i</span>
+                      <span>{errors.ofticker}</span>
+                    </div>
+                  )}
+                {errors.ofticker.length > 0 && (
+                  <div className="card-error">
+                    <span>{errors.ofticker}</span>
+                  </div>
+                )}
+                <div className="input-group">
+                  <Form.Control
+                    name="isActive"
+                    type="submit"
+                    onClick={handleSubmit}
+                    value="Save"
+                  />  
+                  <Form.Control
+                    type="button"
+                    onClick={onCancel}
+                    value="Cancel" 
+                  />
+              </div>
+            </Col>
+          </div>
+        </Form.Group>
   
+  );
+  };  
 
 
 

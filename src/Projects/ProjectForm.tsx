@@ -41,6 +41,7 @@ import PropTypes from 'prop-types';
       
       
       setProject((p) => {
+        alert ("here")
         updatedProject = new Project({ ...p, ...change });
         return updatedProject;
       });

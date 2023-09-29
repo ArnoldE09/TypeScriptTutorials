@@ -27,6 +27,8 @@ import React  from 'react';
 
 
 
+
+
  
 
 
@@ -155,7 +157,9 @@ function HomePage() {
     
     {/* <ExplainBindingsComponent></ExplainBindingsComponent>     */}
     {/* {/* <div> */}
-      <Stocks></Stocks>
+    <Stocks appName="Stock Application"></Stocks>
+      {/* <Stocks></Stocks> */}
+      
       
     
     {/* <ValidationSchema></ValidationSchema> 
